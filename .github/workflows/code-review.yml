@@ -1,0 +1,29 @@
+name: Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-quality-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Prettier
+        run: npx prettier --check . # Check for code formatting issues
+        continue-on-error: false # Fail the job if Prettier fails
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high # Scan for vulnerabilities
+        continue-on-error: false # Fail the job if vulnerabilities are found
