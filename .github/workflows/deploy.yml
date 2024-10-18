@@ -28,4 +28,4 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod' # Use --prod for production deployment
+          vercel-args: '--prod -y' # Use --prod for production deployment
