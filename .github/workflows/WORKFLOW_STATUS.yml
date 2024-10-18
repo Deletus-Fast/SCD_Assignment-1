@@ -1,0 +1,32 @@
+name: Generate Workflow Status Report
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  status-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get Workflow Runs
+        id: get_workflow_runs
+        run: |
+          # Get the workflow runs for the specified workflows
+          WORKFLOWS=("Your Main Workflow Name") # Replace with your workflow names
+          REPORT=""
+          for WORKFLOW in "${WORKFLOWS[@]}"; do
+            echo "Checking workflow: $WORKFLOW"
+            RUNS=$(gh run list --workflow="$WORKFLOW" --json status,conclusion --jq '.[] | "Workflow: $WORKFLOW\nStatus: \(.status)\nConclusion: \(.conclusion)\n"')
+            REPORT+="$RUNS\n"
+          done
+          echo -e "$REPORT" > WORKFLOW_STATUS.md
+
+      - name: Commit and Push Status Report
+        run: |
+          git add WORKFLOW_STATUS.md
+          git commit -m "chore(release): update workflow status report"
+          git push origin main
