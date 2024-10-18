@@ -1,0 +1,28 @@
+{
+    "env": {
+      "browser": true,
+      "es2021": true,
+      "jest": true,        // Enable Jest environment
+      "node": true         // Enable Node environment
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended" // Add React rules
+    ],
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "settings": {
+      "react": {
+        "version": "detect" // Automatically detect React version
+      }
+    },
+    "rules": {
+      // You can customize your rules here
+    }
+  }
+  
