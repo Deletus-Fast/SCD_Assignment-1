@@ -1,0 +1,40 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/**'        # Trigger when documentation files are changed
+      - 'readthedocs.yml' # Trigger when the configuration file is changed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # Specify the version you need
+
+      - name: Install requirements
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build Documentation
+        run: |
+          pip install sphinx  # Ensure Sphinx is installed
+          sphinx-build -b html docs/ docs/_build/html  # Adjust paths if necessary
+
+      - name: Deploy to Read the Docs
+        env:
+          READTHEDOCS_PROJECT: your_project_name  # Replace with your Read the Docs project name
+          READTHEDOCS_TOKEN: ${{ secrets.READTHEDOCS_TOKEN }}
+        run: |
+          curl -X POST \
+            -H "Authorization: Token ${READTHEDOCS_TOKEN}" \
+            "https://readthedocs.org/api/v2/projects/scd-assignment-2/builds/"
